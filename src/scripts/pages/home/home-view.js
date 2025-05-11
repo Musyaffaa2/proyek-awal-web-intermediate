@@ -1,6 +1,6 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import pinIcon from "/images/pin.png";
+import pinIcon from "../../../public/images/pin.png";
 
 export default class HomeView {
   constructor() {
@@ -15,13 +15,6 @@ export default class HomeView {
     this.onNext = null;
     this.onPrev = null;
     this.onStoryClick = null;
-
-    this.customIcon = L.icon({
-      iconUrl: pinIcon,
-      iconSize: [38, 38],
-      iconAnchor: [19, 38],
-      popupAnchor: [0, -38],
-    });
   }
 
   init() {
@@ -32,13 +25,11 @@ export default class HomeView {
     this.currentPageText = document.getElementById("current-page");
     this.loadingElement = document.getElementById("loading");
 
-    // Inisialisasi peta
     this.map = L.map(this.mapElement).setView([0, 0], 2);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap contributors",
     }).addTo(this.map);
 
-    // Event pagination
     this.prevButton.addEventListener("click", () => {
       if (this.onPrev) this.onPrev();
     });
@@ -52,15 +43,15 @@ export default class HomeView {
     const html = stories
       .map(
         (story) => `
-        <div class="story" data-id="${story.id}">
-          <h2>${story.name}</h2>
-          <p><small>${new Date(story.createdAt).toLocaleString()}</small></p>
-          <p>${story.description}</p>
-          <div class="story-image-container">
-            <img class="story-image" src="${story.photoUrl}" alt="${story.name}'s story image" />
+          <div class="story" data-id="${story.id}">
+            <h2>${story.name}</h2>
+            <p><small>${new Date(story.createdAt).toLocaleString()}</small></p>
+            <p>${story.description}</p>
+            <div class="story-image-container">
+              <img class="story-image" src="${story.photoUrl}" alt="${story.name}'s story image" />
+            </div>
           </div>
-        </div>
-      `
+        `
       )
       .join("");
 
@@ -69,19 +60,29 @@ export default class HomeView {
     this.prevButton.disabled = currentPage === 1;
     this.nextButton.disabled = stories.length < pageSize;
 
-    // Hapus marker lama
     this.map.eachLayer((layer) => {
       if (layer instanceof L.Marker) {
         this.map.removeLayer(layer);
       }
     });
 
-    // Tambahkan marker baru
     stories.forEach((story) => {
       if (story.lat && story.lon) {
-        const marker = L.marker([story.lat, story.lon], { icon: this.customIcon })
-          .addTo(this.map)
-          .bindPopup(this.getPopupHTML(story));
+        const customIcon = L.icon({
+          iconUrl: pinIcon,
+          iconSize: [38, 38],
+          iconAnchor: [19, 38],
+          popupAnchor: [0, -38],
+        });
+
+        const marker = L.marker([story.lat, story.lon], { icon: customIcon }).addTo(this.map)
+          .bindPopup(`
+              <div style="text-align: center;">
+                <img src="${story.photoUrl}" alt="${story.name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;" />
+                <p><b>${story.name}</b></p>
+                <button id="preview-${story.id}" style="background-color: #4caf50; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">View Details</button>
+              </div>
+            `);
 
         marker.on("popupopen", () => {
           const previewButton = document.getElementById(`preview-${story.id}`);
@@ -94,7 +95,6 @@ export default class HomeView {
       }
     });
 
-    // Tambahkan event click ke story di bawah peta
     document.querySelectorAll(".story").forEach((storyElement) => {
       storyElement.addEventListener("click", () => {
         const id = storyElement.getAttribute("data-id");
@@ -103,23 +103,8 @@ export default class HomeView {
     });
   }
 
-  getPopupHTML(story) {
-    return `
-      <div style="text-align: center;">
-        <img src="${story.photoUrl}" alt="${story.name}" 
-          style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;" />
-        <p><b>${story.name}</b></p>
-        <button id="preview-${story.id}" 
-          style="background-color: #4caf50; color: white; border: none; padding: 5px 10px; 
-                 border-radius: 5px; cursor: pointer;">
-          View Details
-        </button>
-      </div>
-    `;
-  }
-
   showError(message) {
-    this.storiesContainer.innerHTML = `<p class="error-message" style="color: red;">${message}</p>`;
+    this.storiesContainer.innerHTML = `<p class="error-message">${message}</p>`;
     this.prevButton.disabled = true;
     this.nextButton.disabled = true;
   }
