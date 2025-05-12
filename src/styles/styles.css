@@ -6,7 +6,9 @@
 }
 
 body {
-  font-family: "Arial", sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
 }
 
 .container {
@@ -17,7 +19,8 @@ body {
 
 /* HEADER */
 header {
-  background-color: rgb(98, 218, 255);
+  background: linear-gradient(90deg, #62daff, #89f7fe);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .main-header {
@@ -30,25 +33,25 @@ header {
 }
 
 .brand-name {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: bold;
   text-decoration: none;
-  color: #333;
-  padding: 10px 0px;
+  color: #1f2937;
+  padding: 10px 0;
 }
 
 /* NAVIGATION */
 .navigation-drawer {
   min-height: 100vh;
-  width: 200px;
-  padding: 20px 10px;
-  background-color: #fff;
+  width: 220px;
+  padding: 24px 12px;
+  background-color: #ffffff;
   position: fixed;
   inset-block-start: 0;
   inset-inline-start: 0;
-  box-shadow: 0 0 4px 2px #00000033;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   transform: translateX(-100%);
-  transition: transform 350ms;
+  transition: transform 350ms ease;
   z-index: 9999;
 }
 
@@ -57,13 +60,13 @@ header {
 }
 
 .drawer-button {
-  padding: 8px;
-  border: 0;
-  border-radius: 4px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
   background-color: transparent;
   font-weight: bold;
   font-size: 28px;
-  color: #141e16;
+  color: #111827;
   cursor: pointer;
 }
 
@@ -71,18 +74,21 @@ header {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 10px 20px;
+  gap: 12px 20px;
 }
 
 .nav-list li a {
-  padding: 15px 10px;
+  padding: 12px;
   display: block;
-  color: #333;
+  color: #374151;
   text-decoration: none;
+  border-radius: 6px;
+  transition: background-color 0.2s;
 }
 
 .nav-list li a:hover {
-  text-decoration: underline;
+  background-color: #f3f4f6;
+  text-decoration: none;
 }
 
 @media screen and (width > 1000px) {
@@ -113,30 +119,31 @@ header {
 
 /* MAIN CONTENT */
 .main-content {
-  padding-block: 20px;
+  padding-block: 24px;
 }
 
-/* HEADINGS */
 .container h1 {
   text-align: start;
   margin-bottom: 24px;
-  font-size: 28px;
-  color: #333;
+  font-size: 32px;
+  color: #1f2937;
 }
 
-/* FORM STYLES SHARED */
+/* FORM SHARED */
 form input,
 form textarea,
 form button {
-  padding: 10px 12px;
+  padding: 12px;
   font-size: 16px;
   border-radius: 8px;
   width: 100%;
-  border: 1px solid #ccc;
+  border: 1px solid #d1d5db;
+  background-color: #fff;
+  transition: all 0.3s ease; /* NEW */
 }
 
 form button {
-  background-color: #4caf50;
+  background-color: #10b981;
   color: white;
   font-weight: bold;
   border: none;
@@ -145,14 +152,14 @@ form button {
 }
 
 form button:hover {
-  background-color: #45a049;
+  background-color: #059669;
 }
 
 /* UPLOAD FORM */
 form#upload-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
 form#upload-form label {
@@ -176,136 +183,57 @@ form#upload-form textarea {
 .map {
   height: 400px;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 16px;
   border: 2px solid #ccc;
-  border-radius: 8px;
-}
-
-/* LOGIN FORM */
-form#login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  background-color: #fdfffc;
-  width: 38%;
   border-radius: 12px;
-  padding: 20px;
-  box-shadow: 4px 4px 20px 1px #bfbfbf;
-}
-
-#login-form button {
-  padding: 15px 24px; /* Ubah sesuai kebutuhan */
-  font-size: 16px;
-  cursor: pointer;
-}
-
-form#login-form label {
-  font-weight: 600;
-  font-size: 16px;
-  color: #555;
-  margin-bottom: 4px;
-}
-
-form#login-form input:focus {
-  border-color: #4caf50;
-  outline: none;
-}
-
-@media screen and (max-width: 768px) {
-  form#login-form {
-    width: 100%;
-  }
-}
-
-#login-result {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 16px;
-}
-
-#login-header {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-#reg_acc {
-  margin-top: 1rem;
-  text-align: center;
-}
-
-/* LOGIN FIELD SECTIONS */
-#name-form,
-#email-form,
-#password-form {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-#name-form label,
-#email-form label,
-#password-form label {
-  font-size: 14px;
-}
-
-#name-form input,
-#email-form input,
-#password-form input {
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
 }
 
 /* STORIES */
 .stories {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  gap: 24px;
   margin-top: 20px;
 }
 
 .story {
   background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  padding: 20px;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .story:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
 }
 
 .story h2 {
   font-size: 1.5rem;
-  margin-bottom: 8px;
-  color: #333;
+  margin-bottom: 10px;
+  color: #1f2937;
 }
 
 .story p {
   font-size: 1rem;
-  color: #666;
-  margin-top: 4px;
+  color: #4b5563;
+  margin-top: 6px;
 }
 
 .story small {
   display: block;
-  margin-top: 8px;
+  margin-top: 10px;
   font-size: 0.8rem;
-  color: #999;
+  color: #9ca3af;
 }
 
-/* Story image */
 .story-image-container {
   width: 100%;
-  height: 350px;
+  height: 300px;
   overflow: hidden;
-  border-radius: 8px;
-  margin: 12px 0;
+  border-radius: 10px;
+  margin: 14px 0;
 }
 
 .story-image {
@@ -318,7 +246,7 @@ form#login-form input:focus {
 .story-location-alt {
   display: flex;
   flex-direction: row;
-  gap: 0 1.5rem;
+  gap: 1.5rem;
   justify-content: center;
   align-items: center;
 }
@@ -334,20 +262,20 @@ form#login-form input:focus {
   position: absolute;
   top: -40px;
   left: 50%;
-  background: #000;
+  background: #111827;
   color: #fff;
-  padding: 8px 12px;
+  padding: 10px 14px;
   z-index: 1000;
   transition: top 0.3s;
   text-decoration: none;
+  border-radius: 4px;
 }
 
 .skip-to-content:focus {
   top: 16px;
 }
 
-
-/* Loading spinner */
+/* Spinner */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -355,18 +283,38 @@ form#login-form input:focus {
 
 #loading {
   text-align: center;
-  margin: 20px 0;
+  margin: 24px 0;
   display: none;
 }
 
 .spinner {
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #3498db;
+  border-top: 4px solid #3b82f6;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   animation: spin 1s linear infinite;
   margin: auto;
+}
+
+.loading-button { /* NEW */
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.loading-button::after { /* NEW */
+  content: '';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid white;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
 }
 
 /* Pagination */
@@ -375,19 +323,19 @@ form#login-form input:focus {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
 .pagination button {
-  padding: 8px 12px;
+  padding: 10px 14px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
 }
 
 #prev-page {
-  background-color: #ddd;
-  padding: 15px 15px;
+  background-color: #e5e7eb;
+  color: #111827;
 }
 
 #prev-page:disabled,
@@ -397,9 +345,8 @@ form#login-form input:focus {
 }
 
 #next-page {
-  background-color: #4caf50;
+  background-color: #10b981;
   color: white;
-  padding: 15px 15px;
 }
 
 /* Error */
@@ -409,22 +356,26 @@ form#login-form input:focus {
   margin: 20px 0;
 }
 
-/* Upload Buttons */
-#file-upload-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+input.error { /* NEW */
+  border-color: #ef4444;
+  background-color: #fef2f2;
 }
 
+input.error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+}
+
+/* Upload Buttons */
+#file-upload-container,
 #mobile-upload-buttons {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 #mobile-upload-buttons button {
-  padding: 10px 12px;
-  background-color: #4caf50;
+  padding: 12px;
+  background-color: #10b981;
   color: white;
   font-weight: bold;
   border: none;
@@ -435,12 +386,12 @@ form#login-form input:focus {
 }
 
 #mobile-upload-buttons button:hover {
-  background-color: #45a049;
+  background-color: #059669;
 }
 
 .file-name-info {
   font-size: 14px;
-  color: #555;
+  color: #6b7280;
   margin-top: 8px;
 }
 
@@ -449,11 +400,11 @@ form#login-form input:focus {
 }
 
 #back-button-dtl {
-  background-color: #4caf50;
+  background-color: #10b981;
   margin-bottom: 1rem;
   color: white;
   font-weight: bold;
-  padding: 8px 16px;
+  padding: 10px 16px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -461,9 +412,183 @@ form#login-form input:focus {
 }
 
 #back-button-dtl:hover {
-  background-color: #45a049;
+  background-color: #059669;
 }
 
-.story-desc{
+.story-desc {
   margin-top: 1rem;
+}
+
+/* AUTH FORM */
+form#auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #ffffff;
+  width: 40%;
+  border-radius: 30px;
+  margin: 1.5rem auto 3rem auto; /* MODIFIED */
+  padding: 40px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.4s ease;
+  transition: all 0.3s ease;
+}
+
+form#auth-form label {
+  font-weight: 600;
+  font-size: 15px;
+  color: #1f2937;
+  margin-bottom: 6px;
+}
+
+.auth-field-section input {
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1px solid #d1d5db;
+  background-color: #f3f4f6;
+  font-size: 15px;
+  transition: all 0.3s ease; /* MODIFIED */
+}
+
+.auth-field-section input:focus {
+  border-color: #10b981;
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  transform: scale(1.02); /* NEW */
+}
+
+/* SUBMIT BUTTON */
+form#auth-form button {
+  background: linear-gradient(to right, #34d399, #10b981);
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+form#auth-form button:hover {
+  background: linear-gradient(to right, #10b981, #059669);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* RESPONSIVE */
+@media screen and (max-width: 768px) {
+  form#auth-form {
+    width: 90%;
+    padding: 24px;
+  }
+}
+
+/* TOGGLE SWITCH AUTH MODE */
+.auth-toggle-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e5e7eb; /* NEW */
+  padding: 6px; /* NEW */
+  border-radius: 12px; /* NEW */
+  background-color: #f9fafb; /* NEW */
+}
+
+.auth-toggle-buttons button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  background-color: #e5e7eb;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.auth-toggle-buttons button.active {
+  background-color: #10b981;
+  color: white;
+}
+
+.auth-toggle-buttons button:hover {
+  background-color: #d1d5db;
+}
+
+.auth-field-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* HEADER TITLE */
+#auth-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+#auth-header h2 {
+  font-size: clamp(1.5rem, 2vw, 2rem); /* MODIFIED */
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 6px;
+}
+
+#auth-header p {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* RESULT / MESSAGE */
+#auth-result {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 16px;
+  color: #ef4444;
+}
+
+/* REGISTER LINK */
+#reg_acc {
+  margin-top: 2.5rem;
+  text-align: center;
+  font-size: 15px;
+  color: #6b7280;
+}
+
+#reg_acc a {
+  color: #10b981;
+  font-weight: 600;
+  text-decoration: none;
+  position: relative; /* NEW */
+  transition: color 0.3s ease; /* NEW */
+}
+
+#reg_acc a::after { /* NEW */
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: #10b981;
+  transition: width 0.3s;
+}
+
+#reg_acc a:hover::after {
+  width: 100%;
+}
+
+/* ANIMASI HALUS MASUK */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
