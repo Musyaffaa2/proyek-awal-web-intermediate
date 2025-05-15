@@ -11,7 +11,7 @@ const router = {
   },
 };
 
-export default class UploadStoryPage {
+export default class UploadStoryPresenter {
   constructor() {
     this.view = new UploadStoryView();
     this.presenter = new UploadStoryPresenter(this.view, this.uploadStoryUseCase.bind(this), router);
@@ -19,33 +19,8 @@ export default class UploadStoryPage {
 
   async render() {
     const token = localStorage.getItem("token");
-    const title = token ? "Add New Story" : "Add New Story (Guest)";
-
-    return `
-      <section class="container">
-        <h1>${title}</h1>
-        <form id="upload-form">
-          <div id="photo-upload-section">
-            <label for="photo">Photo:</label>
-            <!-- Ini akan diisi di afterRender -->
-          </div>
-          <div id="file-name" style="margin-top:8px; color: #555;"></div>
-
-          <div>
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" required></textarea>
-          </div>
-          <div>
-            <label for="map">Select Location:</label>
-            <div id="map" class="map"></div>
-          </div>
-          <input type="hidden" id="lat" name="lat" />
-          <input type="hidden" id="lon" name="lon" />
-          <button type="submit">Upload</button>
-        </form>
-        <div id="upload-result"></div>
-      </section>
-    `;
+    const html = this.view.render(token);
+    return html;
   }
 
   async afterRender() {
