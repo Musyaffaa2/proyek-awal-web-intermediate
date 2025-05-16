@@ -1,5 +1,4 @@
 import UploadStoryView from "./upload-story-view";
-import UploadStoryPresenter from "./upload-story-presenter";
 import { postStory, postGuestStory } from "../../data/api";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -14,26 +13,27 @@ const router = {
 export default class UploadStoryPresenter {
   constructor() {
     this.view = new UploadStoryView();
-    this.presenter = new UploadStoryPresenter(this.view, this.uploadStoryUseCase.bind(this), router);
+    this.map = null;
+    this.marker = null;
   }
 
   async render() {
     const token = localStorage.getItem("token");
-    const html = this.view.render(token);
-    return html;
+    return this.view.render(token);
   }
 
   async afterRender() {
     this.view.init();
     this.setupMap();
     this.setupPhotoUpload();
+    this.setupFormSubmit();
   }
 
   setupMap() {
-    const map = L.map("map").setView([0, 0], 2);
+    this.map = L.map("map").setView([0, 0], 2);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap contributors",
-    }).addTo(map);
+    }).addTo(this.map);
 
     const customIcon = L.icon({
       iconUrl: pinIcon,
@@ -41,17 +41,17 @@ export default class UploadStoryPresenter {
       iconAnchor: [19, 38],
     });
 
-    let marker;
-
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          map.setView([latitude, longitude], 13);
-          this.view.latInput.value = latitude;
-          this.view.lonInput.value = longitude;
+          this.map.setView([latitude, longitude], 13);
+          this.view.setLatitude(latitude);
+          this.view.setLongitude(longitude);
 
-          marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
+          this.marker = L.marker([latitude, longitude], {
+            icon: customIcon,
+          }).addTo(this.map);
         },
         (error) => {
           console.error("Geolocation error:", error);
@@ -59,48 +59,46 @@ export default class UploadStoryPresenter {
       );
     }
 
-    map.on("click", (e) => {
+    this.map.on("click", (e) => {
       const { lat, lng } = e.latlng;
-      this.view.latInput.value = lat;
-      this.view.lonInput.value = lng;
+      this.view.setLatitude(lat);
+      this.view.setLongitude(lng);
 
-      if (marker) {
-        marker.setLatLng(e.latlng);
+      if (this.marker) {
+        this.marker.setLatLng(e.latlng);
       } else {
-        marker = L.marker(e.latlng, { icon: customIcon }).addTo(map);
+        this.marker = L.marker(e.latlng, { icon: customIcon }).addTo(this.map);
       }
     });
   }
 
   setupPhotoUpload() {
-    const photoUploadSection = this.view.photoUploadSection;
-    const photoInput = this.view.photoInput;
+    this.view.onGalleryClick = () => {
+      this.view.setCaptureMode("none");
+      this.view.triggerFileInput();
+    };
 
-    photoUploadSection.innerHTML += `
-      <div style="display:flex; gap:10px; margin-top:8px;">
-        <button type="button" id="gallery-button" style="flex:1; padding:10px; background-color:#2196f3; color:white; border:none; border-radius:8px;">Gallery</button>
-        <button type="button" id="camera-button" style="flex:1; padding:10px; background-color:#4caf50; color:white; border:none; border-radius:8px;">Camera</button>
-      </div>
-    `;
+    this.view.onCameraClick = () => {
+      this.view.setCaptureMode("environment");
+      this.view.triggerFileInput();
+    };
 
-    const galleryButton = document.getElementById("gallery-button");
-    const cameraButton = document.getElementById("camera-button");
+    this.view.addPhotoOptionButtons();
+  }
 
-    galleryButton.addEventListener("click", () => {
-      photoInput.removeAttribute("capture");
-      photoInput.click();
-    });
-
-    cameraButton.addEventListener("click", () => {
-      photoInput.setAttribute("capture", "environment");
-      photoInput.click();
-    });
-
-    photoInput.addEventListener("change", () => {
-      if (photoInput.files.length > 0) {
-        this.view.updateFileName(photoInput.files[0].name);
+  setupFormSubmit() {
+    this.view.onSubmit = async (photo, description, lat, lon) => {
+      try {
+        this.view.showLoading();
+        await this.uploadStoryUseCase(photo, description, lat, lon);
+        this.view.showSuccess("Story uploaded successfully!");
+        setTimeout(() => {
+          router.redirectToHome();
+        }, 1500);
+      } catch (error) {
+        this.view.showError("Failed to upload story: " + error.message);
       }
-    });
+    };
   }
 
   async uploadStoryUseCase(photo, description, lat, lon) {

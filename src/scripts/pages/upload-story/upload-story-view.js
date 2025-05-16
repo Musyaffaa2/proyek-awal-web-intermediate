@@ -7,7 +7,11 @@ export default class UploadStoryView {
     this.latInput = null;
     this.lonInput = null;
     this.photoUploadSection = null;
+
+    // Callback yang akan di-set dari Presenter
     this.onSubmit = null;
+    this.onGalleryClick = null;
+    this.onCameraClick = null;
   }
 
   render(token) {
@@ -53,11 +57,47 @@ export default class UploadStoryView {
       if (this.onSubmit) {
         const photo = this.photoInput.files[0];
         const description = this.form.description.value;
-        const lat = this.latInput.value;
-        const lon = this.lonInput.value;
+        const lat = this.getLatitude();
+        const lon = this.getLongitude();
         this.onSubmit(photo, description, lat, lon);
       }
     });
+  }
+
+  addPhotoOptionButtons() {
+    const buttonsHTML = `
+      <div style="display:flex; gap:10px; margin-top:8px;">
+        <button type="button" id="gallery-button" style="flex:1; padding:10px; background-color:#2196f3; color:white; border:none; border-radius:8px;">Gallery</button>
+        <button type="button" id="camera-button" style="flex:1; padding:10px; background-color:#4caf50; color:white; border:none; border-radius:8px;">Camera</button>
+      </div>
+    `;
+    this.photoUploadSection.insertAdjacentHTML("beforeend", buttonsHTML);
+
+    document.getElementById("gallery-button").addEventListener("click", () => {
+      this.onGalleryClick?.();
+    });
+
+    document.getElementById("camera-button").addEventListener("click", () => {
+      this.onCameraClick?.();
+    });
+
+    this.photoInput.addEventListener("change", () => {
+      if (this.photoInput.files.length > 0) {
+        this.updateFileName(this.photoInput.files[0].name);
+      }
+    });
+  }
+
+  triggerFileInput() {
+    this.photoInput.click();
+  }
+
+  setCaptureMode(mode) {
+    if (mode === "none") {
+      this.photoInput.removeAttribute("capture");
+    } else {
+      this.photoInput.setAttribute("capture", mode);
+    }
   }
 
   showLoading() {
@@ -81,7 +121,24 @@ export default class UploadStoryView {
   }
 
   clearMap() {
-    this.latInput.value = "";
-    this.lonInput.value = "";
+    this.setLatitude("");
+    this.setLongitude("");
+  }
+
+  // Method untuk manipulasi Lat Lon 
+  setLatitude(lat) {
+    this.latInput.value = lat;
+  }
+
+  setLongitude(lon) {
+    this.lonInput.value = lon;
+  }
+
+  getLatitude() {
+    return this.latInput.value;
+  }
+
+  getLongitude() {
+    return this.lonInput.value;
   }
 }
