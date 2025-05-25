@@ -41,8 +41,10 @@ class App {
     const token = localStorage.getItem("token");
 
     if (token) {
-      authButton.innerHTML = '<a href="#/login">Logout</a>';
-      authButton.addEventListener("click", () => {
+      authButton.innerHTML = '<a href="#" id="logout-link">Logout</a>';
+      const logoutLink = document.getElementById("logout-link");
+      logoutLink?.addEventListener("click", (e) => {
+        e.preventDefault();
         localStorage.removeItem("token");
         window.location.hash = "#/login";
       });

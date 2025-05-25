@@ -4,6 +4,22 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import pinIcon from "../../../public/images/pin.png";
 
+// Fungsi utility untuk mengirim data cerita ke API
+async function uploadStoryToApi({ photo, description, lat, lon }, token) {
+  const storyData = {
+    description,
+    photo,
+    lat: lat ? parseFloat(lat) : undefined,
+    lon: lon ? parseFloat(lon) : undefined,
+  };
+
+  if (token) {
+    return await postStory(storyData);
+  } else {
+    return await postGuestStory(storyData);
+  }
+}
+
 const router = {
   redirectToHome: () => {
     window.location.hash = "#/";
@@ -15,11 +31,12 @@ export default class UploadStoryPresenter {
     this.view = new UploadStoryView();
     this.map = null;
     this.marker = null;
+    this.token = null;
   }
 
   async render() {
-    const token = localStorage.getItem("token");
-    return this.view.render(token);
+    this.token = this.view.getToken(); // Ambil token dari View
+    return this.view.render(this.token);
   }
 
   async afterRender() {
@@ -90,7 +107,7 @@ export default class UploadStoryPresenter {
     this.view.onSubmit = async (photo, description, lat, lon) => {
       try {
         this.view.showLoading();
-        await this.uploadStoryUseCase(photo, description, lat, lon);
+        await uploadStoryToApi({ photo, description, lat, lon }, this.token);
         this.view.showSuccess("Story uploaded successfully!");
         setTimeout(() => {
           router.redirectToHome();
@@ -99,21 +116,5 @@ export default class UploadStoryPresenter {
         this.view.showError("Failed to upload story: " + error.message);
       }
     };
-  }
-
-  async uploadStoryUseCase(photo, description, lat, lon) {
-    const token = localStorage.getItem("token");
-    const storyData = {
-      description,
-      photo,
-      lat: lat ? parseFloat(lat) : undefined,
-      lon: lon ? parseFloat(lon) : undefined,
-    };
-
-    if (token) {
-      return await postStory(storyData);
-    } else {
-      return await postGuestStory(storyData);
-    }
   }
 }
