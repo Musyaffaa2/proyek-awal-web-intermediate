@@ -14,10 +14,6 @@ export default class UploadStoryView {
     this.onCameraClick = null;
   }
 
-  getToken() {
-    return localStorage.getItem("token"); // Ambil token dari localStorage
-  }
-
   render(token) {
     const title = token ? "Add New Story" : "Add New Story (Guest)";
     return `

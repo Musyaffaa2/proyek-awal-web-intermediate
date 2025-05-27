@@ -7,6 +7,11 @@ import "leaflet/dist/leaflet.css";
 import pinIcon from "../../../public/images/pin.png";
 
 export default class UploadStoryPage {
+
+  getToken() {
+    return localStorage.getItem("token"); // Ambil token dari localStorage
+  }
+  
   async render() {
     const token = localStorage.getItem("token");
     const title = token ? "Add New Story" : "Add New Story (Guest)";

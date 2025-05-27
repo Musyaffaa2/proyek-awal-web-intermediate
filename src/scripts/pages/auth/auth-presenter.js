@@ -1,9 +1,9 @@
 export default class AuthPresenter {
-  constructor(view, useCases, router, mode) {
+  constructor(view, page, router, mode) {
     this.view = view;
-    this.mode = mode;
-    this.useCases = useCases;
+    this.page = page;
     this.router = router;
+    this.mode = mode;
 
     this.view.onSubmit = this.mode === "login"
       ? this.handleLogin.bind(this)
@@ -13,11 +13,10 @@ export default class AuthPresenter {
   async handleLogin(email, password) {
     try {
       this.view.showLoading();
-      const response = await this.useCases.login(email, password);
+      const response = await this.page.login(email, password);
 
       if (!response.error) {
         this.view.showSuccess(response.message);
-        localStorage.setItem("token", response.loginResult.token);
         this.router.redirectToHome();
       } else {
         this.view.showError(response.message);
@@ -32,9 +31,14 @@ export default class AuthPresenter {
   async handleRegister(name, email, password) {
     try {
       this.view.showLoading();
-      const response = await this.useCases.register(name, email, password);
-      this.view.showSuccess(response.message);
-      this.router.redirectToLogin();
+      const response = await this.page.register(name, email, password);
+
+      if (!response.error) {
+        this.view.showSuccess(response.message);
+        this.router.redirectToLogin();
+      } else {
+        this.view.showError(response.message);
+      }
     } catch (error) {
       this.view.showError(`Register gagal: ${error.message}`);
     } finally {

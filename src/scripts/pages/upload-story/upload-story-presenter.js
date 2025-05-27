@@ -1,4 +1,5 @@
 import UploadStoryView from "./upload-story-view";
+import UploadStoryPage from "./upload-story-page";
 import { postStory, postGuestStory } from "../../data/api";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -28,6 +29,7 @@ const router = {
 
 export default class UploadStoryPresenter {
   constructor() {
+    this.page = new UploadStoryPage();
     this.view = new UploadStoryView();
     this.map = null;
     this.marker = null;
@@ -35,9 +37,17 @@ export default class UploadStoryPresenter {
   }
 
   async render() {
-    this.token = this.view.getToken(); // Ambil token dari View
-    return this.view.render(this.token);
+    // Ambil token dari model (page)
+    this.token = this.page.getToken();
+
+    // Render halaman dari model, pasang ke DOM
+    const html = await this.page.render();
+    document.getElementById("app").innerHTML = html;
+
+    // Render view, passing token
+    await this.view.render(this.token);
   }
+
 
   async afterRender() {
     this.view.init();
@@ -89,7 +99,7 @@ export default class UploadStoryPresenter {
     });
   }
 
-  setupPhotoUpload() {
+   setupPhotoUpload() {
     this.view.onGalleryClick = () => {
       this.view.setCaptureMode("none");
       this.view.triggerFileInput();
