@@ -15,7 +15,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build
-      - uses: actions/upload-pages-artifact@v1  # Ganti v4 menjadi v1
+      - uses: actions/upload-pages-artifact@v1
         with:
           path: './dist'
 
