@@ -1,17 +1,20 @@
 import { postGuestStory, postStory } from "../../data/api";
 import { isMobile } from "../../utils/is-mobile";
-import { startWebcam, stopWebcam, captureWebcamPhoto } from "../../utils/webcam";
+import {
+  startWebcam,
+  stopWebcam,
+  captureWebcamPhoto,
+} from "../../utils/webcam";
 import { updateCoordinates } from "../../utils/map";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import pinIcon from "../../../public/images/pin.png";
 
 export default class UploadStoryPage {
-
   getToken() {
     return localStorage.getItem("token"); // Ambil token dari localStorage
   }
-  
+
   async render() {
     const token = localStorage.getItem("token");
     const title = token ? "Add New Story" : "Add New Story (Guest)";
@@ -83,12 +86,59 @@ export default class UploadStoryPage {
         (position) => {
           const { latitude, longitude } = position.coords;
           map.setView([latitude, longitude], 13);
-          updateCoordinates(latitude, longitude, latInput, lonInput, latDisplay, lonDisplay);
-          marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
+          updateCoordinates(
+            latitude,
+            longitude,
+            latInput,
+            lonInput,
+            latDisplay,
+            lonDisplay
+          );
+          marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(
+            map
+          );
         },
         (error) => {
-          console.error("Geolocation error:", error);
+          // Handle error gracefully tanpa console.error
+          console.warn("Geolocation unavailable:", error.message);
+          // Set default location (Jakarta, Indonesia)
+          const defaultLat = -6.2088;
+          const defaultLng = 106.8456;
+          map.setView([defaultLat, defaultLng], 10);
+          updateCoordinates(
+            defaultLat,
+            defaultLng,
+            latInput,
+            lonInput,
+            latDisplay,
+            lonDisplay
+          );
+          marker = L.marker([defaultLat, defaultLng], {
+            icon: customIcon,
+          }).addTo(map);
+        },
+        {
+          enableHighAccuracy: false,
+          timeout: 10000,
+          maximumAge: 60000,
         }
+      );
+    } else {
+      // Fallback untuk browser yang tidak support geolocation
+      console.warn("Geolocation is not supported by this browser");
+      const defaultLat = -6.2088;
+      const defaultLng = 106.8456;
+      map.setView([defaultLat, defaultLng], 10);
+      updateCoordinates(
+        defaultLat,
+        defaultLng,
+        latInput,
+        lonInput,
+        latDisplay,
+        lonDisplay
+      );
+      marker = L.marker([defaultLat, defaultLng], { icon: customIcon }).addTo(
+        map
       );
     }
 
@@ -215,7 +265,8 @@ export default class UploadStoryPage {
           };
           reader.readAsDataURL(file);
         } else {
-          previewDiv.innerHTML = "<p style='color: red;'>Selected file is not an image.</p>";
+          previewDiv.innerHTML =
+            "<p style='color: red;'>Selected file is not an image.</p>";
         }
       } else {
         fileNameDiv.textContent = "";

@@ -146,3 +146,50 @@ export async function postGuestStory({ description, photo, lat, lon }) {
 
   return responseData;
 }
+
+export async function subscribeNotification(sub) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("User is not authenticated");
+  }
+
+  const response = await fetch(`${CONFIG.BASE_URL}/notifications/subscribe`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(sub)
+  });
+
+  const responseData = await response.json();
+
+  if (!response.ok) {
+    throw new Error(responseData.message + "Gagal subscribe");
+  }
+
+  return responseData;
+}
+
+export async function unsubscribeNotification() {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("User is not authenticated");
+  }
+
+  const response = await fetch(`${CONFIG.BASE_URL}/notifications/unsubscribe`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const responseData = await response.json();
+
+  if (!response.ok) {
+    throw new Error(responseData.message || "Gagal unsubscribe");
+  }
+
+  return responseData;
+}

@@ -3,20 +3,30 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="favicon.png" />
-    <title>App</title>
+    <link rel="icon" href="/images/favicon.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <title>Story App</title>
   </head>
   <body>
-    <a href="#main-content" class="skip-to-content" id="skip-link">Skip to main content</a>
+    <a href="#main-content" class="skip-to-content" id="skip-link"
+      >Skip to main content</a
+    >
 
     <header>
       <div class="main-header container">
-        <a class="brand-name" href="#/">App</a>
+        <a class="brand-name" href="#/">Story App</a>
 
         <nav id="navigation-drawer" class="navigation-drawer">
           <ul id="nav-list" class="nav-list">
             <li><a href="#/">Beranda</a></li>
             <li><a href="#/story">Story</a></li>
+            <li><a href="#/bookmark">Bookmark</a></li>
+            <li>
+              <button id="enable-push" class="notification-button">
+                <i class="bi bi-bell"></i>
+              </button>
+            </li>
             <li id="auth-button"><a href="#/login">Login</a></li>
           </ul>
         </nav>
